@@ -34,7 +34,7 @@ module NetworkChecks
 
       next if resp.empty?
 
-      if resp.key?('message')
+      if resp.key?('message') && !command.start_with?('/log')
         {
           status: false,
           response: resp
@@ -52,7 +52,7 @@ module NetworkChecks
 
         {
           status: true,
-          response: parsed_hash
+          response: parsed_hash.deep_symbolize_keys
         }
       end
     end.compact
@@ -87,5 +87,8 @@ module NetworkChecks
 
   def satura
    # o speedtest
+  end
+  def logs
+    getall('/log/getall').last(100).map {|e| [e[:response][:time], e[:response][:message]].join(' - ')}.compact
   end
 end
