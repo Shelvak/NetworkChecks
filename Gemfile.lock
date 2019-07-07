@@ -1,0 +1,40 @@
+GIT
+  remote: git://github.com/sequre/mtik.git
+  revision: f5aeec8469831db733d4a2c84b3fa776251b7ddf
+  branch: master
+  specs:
+    mtik (4.0.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (5.2.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    awesome_print (1.8.0)
+    byebug (11.0.1)
+    concurrent-ruby (1.1.5)
+    i18n (1.6.0)
+      concurrent-ruby (~> 1.0)
+    irb (1.0.0)
+    minitest (5.11.3)
+    rake (12.3.2)
+    thread_safe (0.3.6)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activesupport
+  awesome_print
+  byebug
+  irb
+  mtik!
+  rake
+
+BUNDLED WITH
+   2.0.1
