@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/sequre/mtik.git
+  remote: https://github.com/sequre/mtik.git
   revision: f5aeec8469831db733d4a2c84b3fa776251b7ddf
   branch: master
   specs:
@@ -13,13 +13,14 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    awesome_print (1.8.0)
+    amazing_print (1.2.2)
     byebug (11.0.1)
     concurrent-ruby (1.1.5)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     irb (1.0.0)
     minitest (5.11.3)
+    rack (2.2.3)
     rake (12.3.2)
     thread_safe (0.3.6)
     tzinfo (1.2.5)
@@ -30,11 +31,12 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  awesome_print
+  amazing_print
   byebug
   irb
   mtik!
+  rack
   rake
 
 BUNDLED WITH
-   2.0.1
+   2.1.4

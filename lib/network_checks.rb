@@ -1,22 +1,28 @@
+require 'yaml'
+require 'mtik'
+require 'amazing_print'
+require 'active_support/all'
+
 module NetworkChecks
   # will improve...
   extend self
-  require 'awesome_print'; require 'active_support/all'; require 'yaml'; require './lib/network_checks.rb'; require 'mtik'
 
   CONFIG = YAML.safe_load(
     File.read(
       File.expand_path('../config.yml', __dir__)
     )
-  )
+  ).deep_symbolize_keys
+
+  INTERNAL_IPS = CONFIG[:internal_ips]
 
   def mkt_connection
     @connection ||= ::MTik::Connection.new(
-      host: CONFIG['mikrotik']['host'],
-      user: CONFIG['mikrotik']['user'],
-      pass: CONFIG['mikrotik']['pass'],
-      port: CONFIG['mikrotik']['port'],
-      ssl:  false,
-      unecrypted_plaintext: true
+      NetworkChecks::CONFIG[:mikrotik].slice(:host, :user, :pass, :port).merge(
+        conn_timeout:         15,
+        cmd_timeout:          15,
+        ssl:                  false,
+        unecrypted_plaintext: true
+      )
     )
   end
 
@@ -61,16 +67,17 @@ module NetworkChecks
   def list_wifi_clients
     leases = getall('/ip/dhcp-server/lease/getall').map { |e| [e[:response][:mac_address], e[:response]] if e[:response]}.compact.to_h.select do |mac_address, body|
       body[:disabled] == 'false'
-    end.compact
+    end.compact.to_h
 
-    # byebug
     clients = getall('/caps-man/registration-table/getall').map { |e| e[:response] }.compact
 
-    clients.each do |client|
-      leases[client[:mac_address]]&.merge! client.slice(:interface, :tx_rate, :rx_rate, :x_signal, :uptime)
+    clients.each_with_object({}) do |w_client, memo|
+      client = leases[w_client[:mac_address]] || {}
+      name = client[:comment].presence || client[:host_name] || w_client[:host_name]
+      memo[name] = client.merge(w_client).slice(
+        :interface, :address, :mac_address, :tx_rate, :rx_rate, :rx_signal, :uptime,:host_name, :comment,
+      )
     end
-
-    leases.map { |_, body| body.slice(:host_name, :comment, :address, :mac_address, :last_seen, :interface, :tx_rate, :rx_rate, :x_signal, :uptime) }
   end
 
   def pingear

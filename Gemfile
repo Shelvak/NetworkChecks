@@ -4,8 +4,8 @@ gem 'irb'
 gem 'rake'
 gem 'byebug'
 gem 'activesupport'
+gem 'rack'
 
-gem 'awesome_print'
+gem 'amazing_print'
 
 gem 'mtik', github: 'sequre/mtik', branch: 'master'
-

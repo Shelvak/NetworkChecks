@@ -1,0 +1,9 @@
+mikrotik:
+  host: 192.168.0.1
+  user: admin
+  pass: admin
+  port: 8728
+
+internal_ips:
+  "Router": 192.168.0.1
+  "Other R": 192.168.0.2
