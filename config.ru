@@ -33,7 +33,7 @@ class App
 
     body = output.split("\n").map { |l| l.match(/Share results: (.*)\z/)&.captures&.first }.compact.first
 
-    respond('<img src="' + body + '"/>')
+    respond('<a target="_blank" href="' + body + '">' + body + '</a>' + '<br><img src="' + body + '"/>')
   end
 
   def fast
