@@ -1,0 +1,15 @@
+# /etc/systemd/system/network_checks.service
+[Unit]
+Description=Network Checks
+After=NetworkManager.service
+
+[Service]
+Type=simple
+User=rotsen
+Group=rotsen
+ExecStart=/home/rotsen/network_checks/startup.sh
+Restart=always
+TimeoutSec=60
+
+[Install]
+WantedBy=multi-user.target

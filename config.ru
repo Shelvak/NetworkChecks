@@ -1,5 +1,6 @@
 class App
   require 'byebug'
+  require 'json'
   require './lib/network_checks'
 
   HEADERS = { "Content-Type" => "text/html" }
@@ -29,15 +30,18 @@ class App
   end
 
   def speedtest
-    output = `bins/speedtest-cli --simple --share`
+    bin = ['speedtest', arch].compact.join('_')
+    output = JSON.parse(`bins/#{bin} --progress no --format json`)['result']['url']
 
-    body = output.split("\n").map { |l| l.match(/Share results: (.*)\z/)&.captures&.first }.compact.first
+    # body = output.split("\n").map { |l| l.match(/Share results: (.*)\z/)&.captures&.first }.compact.first
 
-    respond('<a target="_blank" href="' + body + '">' + body + '</a>' + '<br><img src="' + body + '"/>')
+    respond('<a target="_blank" href="' + output + '">' + output + '</a>' + '<br><img src="' + output + '.png"/>')
   end
 
   def fast
-    output = `bins/fast_linux`
+    bin = ['fast_linux', arch].compact.join('_')
+
+    output = `bins/#{bin}`
     respond output.split("\r").last.squish.gsub(/\A.*->/, '->')
   end
 
@@ -56,6 +60,13 @@ class App
     end.join("<br>")
 
     respond body
+  end
+
+  def arch
+    case `uname -m`
+    when /armv/ then 'arm'
+    when /86_64/ then 'amd64'
+    end
   end
 end
 
